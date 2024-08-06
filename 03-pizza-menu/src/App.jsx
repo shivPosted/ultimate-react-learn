@@ -1,3 +1,5 @@
+import React from 'react';
+
 const pizzaData = [
   {
     name: 'Focaccia',
@@ -47,12 +49,33 @@ function App() {
   return (
     <div>
       <h1>Hello React!</h1>
-      <Pizza /> {/*   reusing the Pizza component, the power of react */}
-      <Pizza />
-      <Pizza />
-      <Pizza />
+      <Header />
+      <Menu />
+      <Footer />
     </div>
   );
+}
+
+function Header() {
+  return <h1>- Fast React Pizza CO. -</h1>;
+}
+
+function Menu() {
+  return (
+    <>
+      <h2>our menu</h2>
+      <div>
+        <Pizza />
+        <Pizza />
+        <Pizza />
+        <Pizza />
+      </div>
+    </>
+  );
+}
+
+function Footer() {
+  return React.createElement('footer', null, "We're Open Now!");
 }
 
 function Pizza() {
