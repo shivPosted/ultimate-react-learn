@@ -97,7 +97,7 @@ function Footer() {
           <p>
             We&apos;re open between 0{open}:00 and {close}:00
           </p>
-        )}{' '}
+        )}
       </footer>
       <button className="btn">Order</button>
     </div>
@@ -106,6 +106,7 @@ function Footer() {
 }
 
 function Pizza(props) {
+  if (props.pizza.soldOut) return null;
   return (
     <li className="pizza">
       <img src={props.pizza.photoName} alt={props.pizza.name} />
