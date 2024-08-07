@@ -48,11 +48,11 @@ const pizzaData = [
 
 function App() {
   return (
-    <>
+    <div className="container">
       <Header />
       <Menu />
       <Footer />
-    </>
+    </div>
   );
 }
 
@@ -70,11 +70,17 @@ function Menu() {
     <main className="menu">
       <h2>our menu</h2>
       {pizzas.length > 0 ? (
-        <ul className="pizzas">
-          {pizzas.map((pizza, i) => (
-            <Pizza key={i} pizza={pizza} />
-          ))}
-        </ul>
+        <>
+          <p>
+            Authentic Italian cuisine. 6 creative dishes to choose from. All
+            from our stone oven, all organic, all delicious.
+          </p>
+          <ul className="pizzas">
+            {pizzas.map((pizza, i) => (
+              <Pizza key={i} pizza={pizza} />
+            ))}
+          </ul>
+        </>
       ) : (
         <p>We&apos;re working on our menu. Please come back later :)</p>
       )}
@@ -85,7 +91,7 @@ function Menu() {
 function Footer() {
   const hour = new Date().getHours();
   const open = 8;
-  const close = 20;
+  const close = 22;
   const isOpen = hour >= open && hour <= close;
 
   return (
