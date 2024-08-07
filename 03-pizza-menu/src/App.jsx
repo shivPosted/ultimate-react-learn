@@ -101,11 +101,11 @@ function Footer() {
   );
   // React.createElement('footer', null, "We're Open Now!");
 }
-function Order(props) {
+function Order({ hour }) {
   return (
     <div className="order">
       <p>
-        {props.hour < 10 ? String(props.hour).padStart(2, 0) : props.hour}
+        {hour < 10 ? String(hour).padStart(2, 0) : hour}
         :00.We&apos;re Open Now
       </p>
       <button className="btn">Order</button>
@@ -113,15 +113,15 @@ function Order(props) {
   );
 }
 
-function Pizza(props) {
-  if (props.pizza.soldOut) return null;
+function Pizza({ pizza: { soldOut, photoName, name, ingredients, price } }) {
+  if (soldOut) return null;
   return (
     <li className="pizza">
-      <img src={props.pizza.photoName} alt={props.pizza.name} />
+      <img src={photoName} alt={name} />
       <div>
-        <h3>{props.pizza.name} </h3>
-        <p>{props.pizza.ingredients}</p>
-        <span>{props.pizza.price}</span>
+        <h3>{name} </h3>
+        <p>{ingredients}</p>
+        <span>{price}</span>
       </div>
     </li>
   );
