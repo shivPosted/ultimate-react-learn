@@ -65,23 +65,32 @@ function Header() {
 }
 
 function Menu() {
+  const pizzas = [...pizzaData];
   return (
     <main className="menu">
       <h2>our menu</h2>
-      <ul className="pizzas">
-        {pizzaData.map((pizza, i) => (
-          <Pizza key={i} pizza={pizza} />
-        ))}
-      </ul>
+      {pizzas.length > 0 && (
+        <ul className="pizzas">
+          {pizzas.map((pizza, i) => (
+            <Pizza key={i} pizza={pizza} />
+          ))}
+        </ul>
+      )}
     </main>
   );
 }
 
 function Footer() {
+  const hour = new Date().getHours();
+  const open = 8;
+  const close = 20;
+  const isOpen = hour >= open && hour <= close;
+
   return (
-    <footer className="footer">
-      {new Date().toLocaleTimeString()}. We&apos;re Open Now
-    </footer>
+    <div className="order">
+      <footer className="footer">{isOpen && <p>We&apos;re Open Now</p>}</footer>
+      <button className="btn">Order</button>
+    </div>
   );
   // React.createElement('footer', null, "We're Open Now!");
 }
