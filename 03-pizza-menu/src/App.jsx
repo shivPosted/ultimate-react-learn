@@ -1,5 +1,5 @@
 import React from 'react';
-import '../public/index.css';
+import '../public/style.css';
 
 const pizzaData = [
   {
@@ -68,20 +68,11 @@ function Menu() {
   return (
     <main className="menu">
       <h2>our menu</h2>
-      <div className="pizzas">
-        <Pizza
-          name="Pizza Prosciutto"
-          ingredients="Tomato, mozarella, ham, aragula, and burrata cheese"
-          price={20}
-          img="pizzas/prosciutto.jpg"
-        />
-        <Pizza
-          name="Pizza Salmino"
-          ingredients="Tomato, Mozerella and Pepperoni"
-          price={18}
-          img="pizzas/salamino.jpg"
-        />
-      </div>
+      <ul className="pizzas">
+        {pizzaData.map((pizza, i) => (
+          <Pizza key={i} pizza={pizza} />
+        ))}
+      </ul>
     </main>
   );
 }
@@ -97,14 +88,14 @@ function Footer() {
 
 function Pizza(props) {
   return (
-    <div className="pizza">
-      <img src={props.img} alt={props.name} />
+    <li className="pizza">
+      <img src={props.pizza.photoName} alt={props.pizza.name} />
       <div>
-        <h3>{props.name} </h3>
-        <p>{props.ingredients}</p>
-        <span>{props.price}</span>
+        <h3>{props.pizza.name} </h3>
+        <p>{props.pizza.ingredients}</p>
+        <span>{props.pizza.price}</span>
       </div>
-    </div>
+    </li>
   );
 }
 
