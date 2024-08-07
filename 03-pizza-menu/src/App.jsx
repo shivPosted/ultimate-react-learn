@@ -1,5 +1,5 @@
 import React from 'react';
-import '../public/index.css';
+import '../public/style.css';
 
 const pizzaData = [
   {
@@ -48,11 +48,11 @@ const pizzaData = [
 
 function App() {
   return (
-    <>
+    <div className="container">
       <Header />
       <Menu />
       <Footer />
-    </>
+    </div>
   );
 }
 
@@ -65,46 +65,71 @@ function Header() {
 }
 
 function Menu() {
+  const pizzas = [...pizzaData];
   return (
     <main className="menu">
       <h2>our menu</h2>
-      <div className="pizzas">
-        <Pizza
-          name="Pizza Prosciutto"
-          ingredients="Tomato, mozarella, ham, aragula, and burrata cheese"
-          price={20}
-          img="pizzas/prosciutto.jpg"
-        />
-        <Pizza
-          name="Pizza Salmino"
-          ingredients="Tomato, Mozerella and Pepperoni"
-          price={18}
-          img="pizzas/salamino.jpg"
-        />
-      </div>
+      {pizzas.length > 0 ? (
+        <>
+          <p>
+            Authentic Italian cuisine. 6 creative dishes to choose from. All
+            from our stone oven, all organic, all delicious.
+          </p>
+          <ul className="pizzas">
+            {pizzas.map((pizza, i) => (
+              <Pizza key={i} pizza={pizza} />
+            ))}
+          </ul>
+        </>
+      ) : (
+        <p>We&apos;re working on our menu. Please come back later :)</p>
+      )}
     </main>
   );
 }
 
 function Footer() {
+  const hour = new Date().getHours();
+  const open = 8;
+  const close = 22;
+  const isOpen = hour >= open && hour <= close;
+
   return (
     <footer className="footer">
-      {new Date().toLocaleTimeString()}. We&apos;re Open Now
+      {isOpen ? (
+        <Order hour={hour} />
+      ) : (
+        <p>
+          We&apos;re open between 0{open}:00 and {close}:00
+        </p>
+      )}
     </footer>
   );
   // React.createElement('footer', null, "We're Open Now!");
 }
-
-function Pizza(props) {
+function Order({ hour }) {
   return (
-    <div className="pizza">
-      <img src={props.img} alt={props.name} />
-      <div>
-        <h3>{props.name} </h3>
-        <p>{props.ingredients}</p>
-        <span>{props.price}</span>
-      </div>
+    <div className="order">
+      <p>
+        {hour < 10 ? String(hour).padStart(2, 0) : hour}
+        :00.We&apos;re Open Now
+      </p>
+      <button className="btn">Order</button>
     </div>
+  );
+}
+
+function Pizza({ pizza: { soldOut, photoName, name, ingredients, price } }) {
+  // if (soldOut) return null;
+  return (
+    <li className={`pizza ${soldOut ? 'sold-out' : ''}`}>
+      <img src={photoName} alt={name} />
+      <div>
+        <h3>{name} </h3>
+        <p>{ingredients}</p>
+        <span>{soldOut ? 'SOLD OUT' : price}</span>
+      </div>
+    </li>
   );
 }
 
