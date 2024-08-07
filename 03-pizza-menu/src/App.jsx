@@ -89,20 +89,28 @@ function Footer() {
   const isOpen = hour >= open && hour <= close;
 
   return (
+    <footer className="footer">
+      {isOpen ? (
+        <Order hour={hour} />
+      ) : (
+        <p>
+          We&apos;re open between 0{open}:00 and {close}:00
+        </p>
+      )}
+    </footer>
+  );
+  // React.createElement('footer', null, "We're Open Now!");
+}
+function Order(props) {
+  return (
     <div className="order">
-      <footer className="footer">
-        {isOpen ? (
-          <p>We&apos;re Open Now</p>
-        ) : (
-          <p>
-            We&apos;re open between 0{open}:00 and {close}:00
-          </p>
-        )}
-      </footer>
+      <p>
+        {props.hour < 10 ? String(props.hour).padStart(2, 0) : props.hour}
+        :00.We&apos;re Open Now
+      </p>
       <button className="btn">Order</button>
     </div>
   );
-  // React.createElement('footer', null, "We're Open Now!");
 }
 
 function Pizza(props) {
