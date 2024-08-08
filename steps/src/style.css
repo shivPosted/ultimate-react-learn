@@ -10,13 +10,15 @@ html {
 
 body {
   font-family: sans-serif;
+  transition: all 0.8s;
 }
 .container {
   padding: 2.4rem 4.8rem;
-  margin: 3.2rem auto;
+  margin: 8rem auto;
   max-width: 40rem;
   background-color: #eee;
   border-radius: 9px;
+  transform: scale(1.2);
 }
 
 .numbers {
@@ -63,4 +65,20 @@ body {
   font-weight: 700;
   background-color: #6f46f1;
   cursor: pointer;
+}
+
+.close-btn {
+  position: absolute;
+  right: 10%;
+  top: 2%;
+  border: none;
+  background-color: transparent;
+  font-size: 4.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  color: #777;
+}
+
+.close-btn:hover {
+  color: #222;
 }

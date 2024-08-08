@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import './style.css';
+('use-strict');
 
 const stepDesc = [
   'Step 1: Learn React ⚛️',
@@ -8,20 +9,36 @@ const stepDesc = [
 ];
 function App() {
   const [step, setStep] = useState(1);
+  const [isOpen, setIsOpen] = useState(true);
+
+  // let [test] = useState({name: 'Shiv'})
   function handleNext() {
     if (step === stepDesc.length) return null;
     setStep(step + 1);
+
+    // step++;
   }
   function handlePrevious() {
     if (step === 1) return null;
     setStep(step - 1);
+
+    //dont update the states manually like this
+    // test.name = 'changed'
+    // step--;
   }
   return (
-    <div className="container">
-      <Numbers step={step} />
-      <StepInfo step={step} />
-      <Buttons fx={{ handleNext, handlePrevious }} />
-    </div>
+    <>
+      <button className="close-btn" onClick={() => setIsOpen(!isOpen)}>
+        {isOpen ? <span>&times;</span> : 'Show'}
+      </button>
+      {isOpen ? (
+        <div className="container">
+          <Numbers step={step} />
+          <StepInfo step={step} />
+          <Buttons fx={{ handleNext, handlePrevious }} />
+        </div>
+      ) : null}{' '}
+    </>
   );
 }
 
