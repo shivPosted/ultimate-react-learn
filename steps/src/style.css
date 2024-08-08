@@ -15,7 +15,7 @@ body {
   padding: 2.4rem 4.8rem;
   margin: 3.2rem auto;
   max-width: 40rem;
-  background-color: #99999987;
+  background-color: #eee;
   border-radius: 9px;
 }
 
@@ -34,7 +34,7 @@ body {
   width: 3.2rem;
   height: 3.2rem;
   border-radius: 50%;
-  background-color: #77777790;
+  background-color: #ccc;
 }
 
 .number.active {
@@ -54,6 +54,8 @@ body {
 }
 
 .button {
+  border: none;
+  outline: none;
   padding: 0.6rem 1.6rem;
   border-radius: 100vw;
   color: #fff;
