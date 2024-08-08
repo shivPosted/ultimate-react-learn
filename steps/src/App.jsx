@@ -14,13 +14,13 @@ function App() {
   // let [test] = useState({name: 'Shiv'})
   function handleNext() {
     if (step === stepDesc.length) return null;
-    setStep(step + 1);
+    setStep(cur => cur + 1);
 
     // step++;
   }
   function handlePrevious() {
     if (step === 1) return null;
-    setStep(step - 1);
+    setStep(cur => cur - 1);
 
     //dont update the states manually like this
     // test.name = 'changed'
@@ -28,7 +28,7 @@ function App() {
   }
   return (
     <>
-      <button className="close-btn" onClick={() => setIsOpen(!isOpen)}>
+      <button className="close-btn" onClick={() => setIsOpen(cur => !cur)}>
         {isOpen ? <span>&times;</span> : 'Show'}
       </button>
       {isOpen ? (
