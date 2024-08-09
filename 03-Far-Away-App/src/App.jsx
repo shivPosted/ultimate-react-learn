@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import './style.css';
 const numArray = [];
 for (let i = 0; i <= 19; i++) {
@@ -28,6 +29,8 @@ function Logo() {
 }
 
 function Form() {
+  const [description, setDescription] = useState('');
+  const [quantity, setQuantity] = useState(1);
   function handleSubmit(e) {
     e.preventDefault();
     alert('form submitted');
@@ -37,14 +40,20 @@ function Form() {
     <form className="form" onSubmit={handleSubmit}>
       <h2>What do you need for your trip?</h2>
       <div className="selection-div">
-        <select>
+        <select value={quantity} onChange={e => setQuantity(+e.target.value)}>
           {numArray.map(num => (
             <option value={num} key={num}>
               {num}
             </option>
           ))}
         </select>
-        <input type="text" placeholder="Item..." className="input-item" />
+        <input
+          type="text"
+          placeholder="Item..."
+          className="input-item"
+          value={description}
+          onChange={e => setDescription(e.target.value)}
+        />
         <button className="add-btn">ADD</button>
       </div>
     </form>
