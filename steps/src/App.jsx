@@ -7,7 +7,17 @@ const stepDesc = [
   'Step 2: Get A Job 💼',
   'Step 3: 🤑 🤑',
 ];
+
 function App() {
+  return (
+    <>
+      {/* <Steps /> */}
+      <Steps />
+    </>
+  );
+}
+
+function Steps() {
   const [step, setStep] = useState(1);
   const [isOpen, setIsOpen] = useState(true);
 
