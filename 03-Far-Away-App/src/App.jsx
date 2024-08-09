@@ -33,7 +33,11 @@ function Form() {
   const [quantity, setQuantity] = useState(1);
   function handleSubmit(e) {
     e.preventDefault();
-    alert('form submitted');
+
+    const item = { quantity, description, packed: false, id: Date.now() };
+    console.log(item);
+    setDescription('');
+    setQuantity(1);
   }
 
   return (
