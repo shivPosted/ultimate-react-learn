@@ -10,11 +10,20 @@ const listItems = [
 ];
 console.log(numArray);
 function App() {
+  const [items, setItems] = useState([]);
+
+  function addItems(item) {
+    setItems(items => [...items, item]);
+  }
+
+  function deleteItems(id) {
+    setItems(items => [...items].filter(item => item.id !== id));
+  }
   return (
     <>
       <Logo />
-      <Form />
-      <PackingList />
+      <Form addItems={addItems} />
+      <PackingList items={items} deleteItems={deleteItems} />
       <Stats />
     </>
   );
@@ -28,7 +37,7 @@ function Logo() {
   );
 }
 
-function Form() {
+function Form({ addItems }) {
   const [description, setDescription] = useState('');
   const [quantity, setQuantity] = useState(1);
   function handleSubmit(e) {
@@ -36,6 +45,7 @@ function Form() {
 
     const item = { quantity, description, packed: false, id: Date.now() };
     console.log(item);
+    addItems(item);
     setDescription('');
     setQuantity(1);
   }
@@ -63,10 +73,10 @@ function Form() {
     </form>
   );
 }
-function PackingList() {
+function PackingList({ items, deleteItems }) {
   return (
     <section className="packing-list">
-      <ListedItems />
+      <ListedItems items={items} deleteItems={deleteItems} />
       <div className="manage-list">
         <select name="sort-list" id="">
           <option value="packed">Sort by packed</option>
@@ -79,23 +89,25 @@ function PackingList() {
     </section>
   );
 }
-function ListedItems() {
+function ListedItems({ items, deleteItems }) {
   return (
     <ul className="listed-items">
-      {listItems.map(item => (
-        <Item itemObj={item} key={item.id} />
+      {items.map(item => (
+        <Item itemObj={item} key={item.id} deleteItems={deleteItems} />
       ))}
     </ul>
   );
 }
-function Item({ itemObj: { description, packed, quantity, id } }) {
+function Item({ itemObj: { description, packed, quantity, id }, deleteItems }) {
   return (
     <li className={`listed-item `}>
       <input id={id} type="checkbox" />
       <label style={packed ? { textDecoration: 'line-through' } : {}}>
         {quantity} {description}
       </label>
-      <button className="close-btn">&times;</button>
+      <button className="close-btn" onClick={() => deleteItems(id)}>
+        &times;
+      </button>
     </li>
   );
 }
