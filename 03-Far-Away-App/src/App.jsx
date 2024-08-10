@@ -6,7 +6,6 @@ for (let i = 0; i <= 19; i++) {
 }
 function App() {
   const [items, setItems] = useState([]);
-
   function addItems(item) {
     setItems(items => [...items, item]);
   }
@@ -36,7 +35,7 @@ function App() {
         toggleItem={toggleItem}
         onClearList={handleClearList}
       />
-      <Stats />
+      <Stats items={items} />
     </>
   );
 }
@@ -148,12 +147,19 @@ function Item({
     </li>
   );
 }
-function Stats() {
+function Stats({ items }) {
+  const count = items.length;
+  const itemsPacked = items.filter(item => item.packed).length;
+  const percentagePacked =
+    count === 0 || itemsPacked === 0
+      ? 0
+      : ((itemsPacked / count) * 100).toFixed(1);
   return (
     <footer className="stats">
-      💼 You have <span className="num-items">0</span> items in your list, and
-      you already packed <span className="num-packed-items">0</span> items (
-      <span className="percentage-packed">0%</span>)
+      💼 You have <span className="num-items">{count}</span> items in your list,
+      and you already packed{' '}
+      <span className="num-packed-items">{itemsPacked}</span> items (
+      <span className="percentage-packed">{percentagePacked}%</span>)
     </footer>
   );
 }
