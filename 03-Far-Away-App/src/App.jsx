@@ -25,22 +25,22 @@ function App() {
     setItems([]);
   }
 
-  function sortList(type) {
-    console.log('inside sorting function');
-    if (type === 'input')
-      setItems(items => [...items].sort((a, b) => a.id - b.id));
-    else if (type === 'description')
-      setItems(items =>
-        [...items].sort((a, b) => a.description.localeCompare(b.description))
-      );
-    else if (type === 'packed') {
-      setItems(items =>
-        [...items].sort((a, b) => Number(a.packed) - Number(b.packed))
-      );
-    } else {
-      setItems(items => [...items].sort((a, b) => b.quantity - a.quantity));
-    }
-  }
+  // function sortList(type) {
+  //   console.log('inside sorting function');
+  //   if (type === 'input')
+  //     setItems(items => [...items].sort((a, b) => a.id - b.id));
+  //   else if (type === 'description')
+  //     setItems(items =>
+  //       [...items].sort((a, b) => a.description.localeCompare(b.description))
+  //     );
+  //   else if (type === 'packed') {
+  //     setItems(items =>
+  //       [...items].sort((a, b) => Number(a.packed) - Number(b.packed))
+  //     );
+  //   } else {
+  //     setItems(items => [...items].sort((a, b) => b.quantity - a.quantity));
+  //   }
+  // }
   return (
     <>
       <Logo />
@@ -50,7 +50,6 @@ function App() {
         deleteItems={deleteItems}
         toggleItem={toggleItem}
         onClearList={handleClearList}
-        sortList={sortList}
       />
       <Stats items={items} />
     </>
@@ -102,17 +101,30 @@ function Form({ addItems }) {
     </form>
   );
 }
-function PackingList({
-  items,
-  deleteItems,
-  toggleItem,
-  onClearList,
-  sortList,
-}) {
+function PackingList({ items, deleteItems, toggleItem, onClearList }) {
+  const [sortBy, setSortBy] = useState('input');
+  let sortedItems;
+  switch (sortBy) {
+    case 'quantity':
+      sortedItems = [...items].sort((a, b) => b.quantity - a.quantity);
+      break;
+    case 'description':
+      sortedItems = [...items].sort((a, b) =>
+        a.description.localeCompare(b.description)
+      );
+      break;
+    case 'packed':
+      sortedItems = [...items].sort(
+        (a, b) => Number(a.packed) - Number(b.packed)
+      );
+      break;
+    default:
+      sortedItems = [...items];
+  }
   return (
     <section className="packing-list">
       <ListedItems
-        items={items}
+        items={sortedItems}
         deleteItems={deleteItems}
         toggleItem={toggleItem}
       />
@@ -120,9 +132,9 @@ function PackingList({
         <select
           name="sort-list"
           id=""
+          value={sortBy}
           onChange={e => {
-            console.log(e.target.value);
-            sortList(e.target.value);
+            setSortBy(e.target.value);
           }}
         >
           <option value="input">Sort by input order</option>
