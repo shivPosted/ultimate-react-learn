@@ -25,6 +25,22 @@ function App() {
     setItems([]);
   }
 
+  function sortList(type) {
+    console.log('inside sorting function');
+    if (type === 'input')
+      setItems(items => [...items].sort((a, b) => a.id - b.id));
+    else if (type === 'description')
+      setItems(items =>
+        [...items].sort((a, b) => a.description.localeCompare(b.description))
+      );
+    else if (type === 'packed') {
+      setItems(items =>
+        [...items].sort((a, b) => Number(a.packed) - Number(b.packed))
+      );
+    } else {
+      setItems(items => [...items].sort((a, b) => b.quantity - a.quantity));
+    }
+  }
   return (
     <>
       <Logo />
@@ -34,6 +50,7 @@ function App() {
         deleteItems={deleteItems}
         toggleItem={toggleItem}
         onClearList={handleClearList}
+        sortList={sortList}
       />
       <Stats items={items} />
     </>
@@ -55,6 +72,7 @@ function Form({ addItems }) {
     e.preventDefault();
 
     const item = { quantity, description, packed: false, id: Date.now() };
+    if (item.description === '') return;
     console.log(item);
     addItems(item);
     setDescription('');
@@ -84,7 +102,13 @@ function Form({ addItems }) {
     </form>
   );
 }
-function PackingList({ items, deleteItems, toggleItem, onClearList }) {
+function PackingList({
+  items,
+  deleteItems,
+  toggleItem,
+  onClearList,
+  sortList,
+}) {
   return (
     <section className="packing-list">
       <ListedItems
@@ -93,11 +117,18 @@ function PackingList({ items, deleteItems, toggleItem, onClearList }) {
         toggleItem={toggleItem}
       />
       <div className="manage-list">
-        <select name="sort-list" id="">
-          <option value="packed">Sort by packed</option>
-          <option value="packed">Sort by packed</option>
-          <option value="packed">Sort by packed</option>
-          <option value="packed">Sort by packed</option>
+        <select
+          name="sort-list"
+          id=""
+          onChange={e => {
+            console.log(e.target.value);
+            sortList(e.target.value);
+          }}
+        >
+          <option value="input">Sort by input order</option>
+          <option value="description">Sort by description</option>
+          <option value="packed">Sort by packed status</option>
+          <option value="quantity">Sort by qunatity</option>
         </select>
         <button className="clear-list-btn" onClick={onClearList}>
           Clear
@@ -148,18 +179,28 @@ function Item({
   );
 }
 function Stats({ items }) {
+  if (!items.length)
+    return (
+      <footer className="stats">Start adding items to your list 🥰</footer>
+    );
   const count = items.length;
   const itemsPacked = items.filter(item => item.packed).length;
   const percentagePacked =
     count === 0 || itemsPacked === 0
       ? 0
-      : ((itemsPacked / count) * 100).toFixed(1);
+      : Math.trunc((itemsPacked / count) * 100);
   return (
     <footer className="stats">
-      💼 You have <span className="num-items">{count}</span> items in your list,
-      and you already packed{' '}
-      <span className="num-packed-items">{itemsPacked}</span> items (
-      <span className="percentage-packed">{percentagePacked}%</span>)
+      {percentagePacked === 100 ? (
+        "You got everything, let's go 🚗"
+      ) : (
+        <>
+          💼 You have <span className="num-items">{count}</span> items in your
+          list, and you already packed{' '}
+          <span className="num-packed-items">{itemsPacked}</span> items (
+          <span className="percentage-packed">{percentagePacked}%</span>)
+        </>
+      )}
     </footer>
   );
 }
