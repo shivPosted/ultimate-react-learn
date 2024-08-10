@@ -4,11 +4,6 @@ const numArray = [];
 for (let i = 0; i <= 19; i++) {
   numArray.push(i + 1);
 }
-const listItems = [
-  { description: 'Item1', packed: true, quantity: 3, id: 1 },
-  { description: 'Item2', packed: false, quantity: 5, id: 2 },
-];
-console.log(numArray);
 function App() {
   const [items, setItems] = useState([]);
 
@@ -17,13 +12,24 @@ function App() {
   }
 
   function deleteItems(id) {
-    setItems(items => [...items].filter(item => item.id !== id));
+    setItems(items => items.filter(item => item.id !== id));
+  }
+  function toggleItem(id) {
+    setItems(items =>
+      items.map(item =>
+        item.id === id ? { ...item, packed: !item.packed } : item
+      )
+    );
   }
   return (
     <>
       <Logo />
       <Form addItems={addItems} />
-      <PackingList items={items} deleteItems={deleteItems} />
+      <PackingList
+        items={items}
+        deleteItems={deleteItems}
+        toggleItem={toggleItem}
+      />
       <Stats />
     </>
   );
@@ -73,10 +79,14 @@ function Form({ addItems }) {
     </form>
   );
 }
-function PackingList({ items, deleteItems }) {
+function PackingList({ items, deleteItems, toggleItem }) {
   return (
     <section className="packing-list">
-      <ListedItems items={items} deleteItems={deleteItems} />
+      <ListedItems
+        items={items}
+        deleteItems={deleteItems}
+        toggleItem={toggleItem}
+      />
       <div className="manage-list">
         <select name="sort-list" id="">
           <option value="packed">Sort by packed</option>
@@ -89,20 +99,39 @@ function PackingList({ items, deleteItems }) {
     </section>
   );
 }
-function ListedItems({ items, deleteItems }) {
+function ListedItems({ items, deleteItems, toggleItem }) {
   return (
     <ul className="listed-items">
       {items.map(item => (
-        <Item itemObj={item} key={item.id} deleteItems={deleteItems} />
+        <Item
+          itemObj={item}
+          key={item.id}
+          deleteItems={deleteItems}
+          toggleItem={toggleItem}
+        />
       ))}
     </ul>
   );
 }
-function Item({ itemObj: { description, packed, quantity, id }, deleteItems }) {
+function Item({
+  itemObj: { description, packed, quantity, id },
+  deleteItems,
+  toggleItem,
+}) {
   return (
     <li className={`listed-item `}>
-      <input id={id} type="checkbox" />
-      <label style={packed ? { textDecoration: 'line-through' } : {}}>
+      <input
+        id={id}
+        type="checkbox"
+        checked={packed}
+        onChange={() => {
+          toggleItem(id);
+        }}
+      />
+      <label
+        htmlFor={id}
+        style={packed ? { textDecoration: 'line-through' } : {}}
+      >
         {quantity} {description}
       </label>
       <button className="close-btn" onClick={() => deleteItems(id)}>
