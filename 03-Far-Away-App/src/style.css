@@ -119,6 +119,7 @@ button {
 
 .clear-list-btn {
   margin-left: 3.2rem;
+  cursor: pointer;
 }
 
 .stats {

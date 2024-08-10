@@ -21,6 +21,11 @@ function App() {
       )
     );
   }
+
+  function handleClearList() {
+    setItems([]);
+  }
+
   return (
     <>
       <Logo />
@@ -29,6 +34,7 @@ function App() {
         items={items}
         deleteItems={deleteItems}
         toggleItem={toggleItem}
+        onClearList={handleClearList}
       />
       <Stats />
     </>
@@ -79,7 +85,7 @@ function Form({ addItems }) {
     </form>
   );
 }
-function PackingList({ items, deleteItems, toggleItem }) {
+function PackingList({ items, deleteItems, toggleItem, onClearList }) {
   return (
     <section className="packing-list">
       <ListedItems
@@ -94,7 +100,9 @@ function PackingList({ items, deleteItems, toggleItem }) {
           <option value="packed">Sort by packed</option>
           <option value="packed">Sort by packed</option>
         </select>
-        <button className="clear-list-btn">Clear</button>
+        <button className="clear-list-btn" onClick={onClearList}>
+          Clear
+        </button>
       </div>
     </section>
   );
