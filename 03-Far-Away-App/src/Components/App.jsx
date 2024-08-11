@@ -23,7 +23,6 @@ function App() {
   }
 
   function handleClearList() {
-    if (items.length === 0) return;
     const confirmed = window.confirm(
       'Are you sure you want to clear the entire list?'
     );
