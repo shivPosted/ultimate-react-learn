@@ -1,0 +1,140 @@
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Poppins:wght@300;400;600;700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 62.5%;
+  color: #5a3e2b;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  width: 100%;
+  height: 100vh;
+}
+
+header {
+  padding: 3.2rem 1.2rem;
+  background-color: #f19721;
+}
+
+header h1 {
+  font-size: 8rem;
+  text-align: center;
+  color: #222;
+  text-transform: uppercase;
+}
+h2 {
+  font-size: 2.4rem;
+}
+.form {
+  display: flex;
+  background-color: #e06c1c;
+  gap: 4.8rem;
+  align-items: center;
+  justify-content: center;
+  padding: 3.2rem 1.2rem;
+}
+
+.selection-div {
+  display: flex;
+  justify-content: space-between;
+  max-width: 50%;
+  gap: 1.2rem;
+}
+select,
+.input-item,
+button {
+  border: none;
+  outline: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 100vw;
+  font-size: 2.4rem;
+  background-color: #fde7aa;
+}
+
+.input-item {
+  font-size: 1.8rem;
+  padding: 0.8rem 1.6rem;
+}
+
+.add-btn {
+  background-color: #68c1a4;
+  font-weight: 600;
+  font-size: 2rem;
+  cursor: pointer;
+}
+
+.packing-list {
+  background-color: #4d3524;
+  height: 40%;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 4rem;
+  align-items: center;
+}
+
+.packing-list select {
+  font-size: 1.8rem;
+  padding: 0.6rem 1.2rem;
+}
+.packing-list .clear-list-btn {
+  font-size: 1.8rem;
+}
+
+.listed-items {
+  width: 80%;
+  list-style: none;
+  /* min-height: 25rem; */
+  height: 25rem;
+  display: grid;
+  align-content: start;
+  grid-template-columns: repeat(4, 1fr);
+  column-gap: 4rem;
+  row-gap: 1.2rem;
+  padding: 4rem 0;
+  /* margin-bottom: 12rem; */
+  /* flex-wrap: wrap; */
+  overflow-y: auto;
+}
+
+.listed-item {
+  font-size: 2.4rem;
+  color: #ffebb3;
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+.listed-item input {
+  width: 2.4rem;
+  height: 2.4rem;
+}
+
+.close-btn {
+  color: red;
+  background-color: inherit;
+  padding: 0;
+  border: none;
+  font-size: 4rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.clear-list-btn {
+  margin-left: 3.2rem;
+  cursor: pointer;
+}
+
+.stats {
+  background-color: #76c7ad;
+  padding: 3.2rem 0;
+  text-align: center;
+  font-weight: 600;
+  font-size: 3.2rem;
+  /* overflow: hidden; */
+}
