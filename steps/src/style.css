@@ -58,13 +58,17 @@ body {
 .button {
   border: none;
   outline: none;
+  display: flex;
+  align-items: center;
   padding: 0.6rem 1.6rem;
   border-radius: 100vw;
-  color: #fff;
   font-size: 1.4rem;
   font-weight: 700;
-  background-color: #6f46f1;
+  gap: 5px;
   cursor: pointer;
+}
+.emoji {
+  font-size: 1.2rem;
 }
 
 .close-btn {
