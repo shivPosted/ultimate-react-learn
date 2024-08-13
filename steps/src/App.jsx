@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import './style.css';
-('use-strict');
 
 const stepDesc = [
   'Step 1: Learn React ⚛️',
@@ -72,13 +71,27 @@ function StepInfo({ step }) {
 function Buttons({ fx: { handleNext, handlePrevious } }) {
   return (
     <div className="buttons">
-      <button className="button" onClick={handlePrevious}>
-        previous
-      </button>
-      <button className="button" onClick={handleNext}>
-        next
-      </button>
+      <Button textColor="#fff" bgColor="#6f46f1" handleClick={handlePrevious}>
+        <span className="emoji">👈</span>
+        <span>previous</span>
+      </Button>
+      <Button textColor="#fff" bgColor="#6f46f1" handleClick={handleNext}>
+        <span>next</span>
+        <span className="emoji">👉</span>
+      </Button>
     </div>
+  );
+}
+function Button({ textColor, bgColor, handleClick, children }) {
+  console.log(bgColor);
+  return (
+    <button
+      className="button"
+      style={{ color: textColor, backgroundColor: bgColor }}
+      onClick={handleClick}
+    >
+      {children}
+    </button>
   );
 }
 
