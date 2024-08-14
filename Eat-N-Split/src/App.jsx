@@ -1,4 +1,4 @@
-import { Children, useState } from 'react';
+import { useState } from 'react';
 import './style.css';
 const initialFriends = [
   {
@@ -27,6 +27,7 @@ function App() {
 
   function handleClick(id) {
     setCurrentId(cur => (cur === id ? null : id));
+    setOpenAddForm(false);
   }
 
   function handleAddFriend() {
@@ -58,6 +59,7 @@ function App() {
     const newObj = addFriend(name, imgUrl);
 
     setFriendList(curArr => [...curArr, newObj]);
+    setOpenAddForm(false);
   }
   return (
     <div className="container">
@@ -115,7 +117,7 @@ function Friend({
         }}
       >
         {balance === 0
-          ? `Both of You  and ${name} are Even`
+          ? `You  and ${name} are Even`
           : balance > 0
           ? `You owe ${name} $${balance}`
           : `${name} owes you $${0 - balance}`}
@@ -136,17 +138,16 @@ function SplitBill({ friendList, handlSplitBill, currentId }) {
   const [yourExpense, setYourExpense] = useState('');
   const [target, setTarget] = useState(0);
 
-  const FriendExpense = billValue - yourExpense;
-  const frinedName = friendList?.find(friend => friend.id === currentId).name;
-  const totaledBalance =
-    target === 0 ? billValue - yourExpense : 0 - (billValue - FriendExpense);
+  const FriendExpense = billValue ? billValue - yourExpense : '';
+  const friendName = friendList?.find(friend => friend.id === currentId).name;
+  const totaledBalance = target === 0 ? FriendExpense : 0 - yourExpense;
 
   function handleChange(val) {
     setTarget(val);
   }
   return (
     <div className="split-bill">
-      <h2>Split A bill with {frinedName}</h2>
+      <h2>Split A bill with {friendName}</h2>
       <form
         action=""
         className="grid"
@@ -171,12 +172,14 @@ function SplitBill({ friendList, handlSplitBill, currentId }) {
         <input
           type="number"
           id="your-expense"
+          maxLength={billValue}
           value={yourExpense}
-          onChange={e =>
-            setYourExpense(cur => (cur === 0 ? '' : +e.target.value))
-          }
+          onChange={e => {
+            if (Number(e.target.value) > billValue) return null;
+            setYourExpense(cur => (cur === 0 ? '' : +e.target.value));
+          }}
         />
-        <label htmlFor="friend-expense">👫{frinedName}&apos;s Expense</label>
+        <label htmlFor="friend-expense">👫{friendName}&apos;s Expense</label>
         <input
           type="number"
           readOnly
