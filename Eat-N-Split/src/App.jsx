@@ -23,9 +23,15 @@ const initialFriends = [
 function App() {
   const [friendList, setFriendList] = useState(initialFriends);
   const [currentId, setCurrentId] = useState(null);
+  const [openAddForm, setOpenAddForm] = useState(false);
 
   function handleClick(id) {
     setCurrentId(cur => (cur === id ? null : id));
+    setOpenAddForm(false);
+  }
+
+  function handleAddFriend() {
+    setOpenAddForm(cur => !cur);
   }
 
   function handlSplitBill(newBal, id) {
@@ -53,6 +59,7 @@ function App() {
     const newObj = addFriend(name, imgUrl);
 
     setFriendList(curArr => [...curArr, newObj]);
+    setOpenAddForm(false);
   }
   return (
     <div className="container">
@@ -61,12 +68,18 @@ function App() {
         friendList={friendList}
         currentId={currentId}
       />
-      <SplitBill
-        currentId={currentId}
-        friendList={friendList}
-        handlSplitBill={handlSplitBill}
-      />
-      <AddFriend onAddFriend={handleFriendAdd} />
+      <Button className="add-friend-btn" onClick={handleAddFriend}>
+        {openAddForm ? 'Close' : 'Add Friend'}
+      </Button>
+      {currentId && (
+        <SplitBill
+          openAddForm={openAddForm}
+          friendList={friendList}
+          handlSplitBill={handlSplitBill}
+          currentId={currentId}
+        />
+      )}
+      {openAddForm && <AddFriend onAddFriend={handleFriendAdd} />}
     </div>
   );
 }
@@ -92,7 +105,7 @@ function Friend({
   currentId,
 }) {
   return (
-    <li className="friend-row">
+    <li className={`friend-row ${id === currentId && 'selected'}`}>
       <figure>
         <img src={image} alt={`${name}'s image`} />
       </figure>
@@ -104,18 +117,18 @@ function Friend({
         }}
       >
         {balance === 0
-          ? `Both of You  and ${name} are Even`
+          ? `You  and ${name} are Even`
           : balance > 0
           ? `You owe ${name} $${balance}`
           : `${name} owes you $${0 - balance}`}
       </p>
-      <button
+      <Button
         onClick={() => {
           handleClick(id);
         }}
       >
         {currentId === id ? 'Close' : 'Select'}
-      </button>
+      </Button>
     </li>
   );
 }
@@ -125,18 +138,16 @@ function SplitBill({ friendList, handlSplitBill, currentId }) {
   const [yourExpense, setYourExpense] = useState('');
   const [target, setTarget] = useState(0);
 
-  if (!currentId) return null;
+  const FriendExpense = billValue ? billValue - yourExpense : '';
+  const friendName = friendList?.find(friend => friend.id === currentId).name;
+  const totaledBalance = target === 0 ? FriendExpense : 0 - yourExpense;
 
-  const FriendExpense = billValue - yourExpense;
-  const frinedName = friendList.find(friend => friend.id === currentId).name;
-  const totaledBalance =
-    target === 0 ? billValue - yourExpense : 0 - (billValue - FriendExpense);
   function handleChange(val) {
     setTarget(val);
   }
   return (
     <div className="split-bill">
-      <h2>Split A bill with {frinedName}</h2>
+      <h2>Split A bill with {friendName}</h2>
       <form
         action=""
         className="grid"
@@ -161,12 +172,14 @@ function SplitBill({ friendList, handlSplitBill, currentId }) {
         <input
           type="number"
           id="your-expense"
+          maxLength={billValue}
           value={yourExpense}
-          onChange={e =>
-            setYourExpense(cur => (cur === 0 ? '' : +e.target.value))
-          }
+          onChange={e => {
+            if (Number(e.target.value) > billValue) return null;
+            setYourExpense(cur => (cur === 0 ? '' : +e.target.value));
+          }}
         />
-        <label htmlFor="friend-expense">👫{frinedName}&apos;s Expense</label>
+        <label htmlFor="friend-expense">👫{friendName}&apos;s Expense</label>
         <input
           type="number"
           readOnly
@@ -184,7 +197,7 @@ function SplitBill({ friendList, handlSplitBill, currentId }) {
           <option value="0">You</option>
           <option value="1">Friend</option>
         </select>
-        <button className="form-btn">Split bill</button>
+        <Button className="form-btn">Split Bill</Button>
       </form>
     </div>
   );
@@ -192,25 +205,14 @@ function SplitBill({ friendList, handlSplitBill, currentId }) {
 
 function AddFriend({ onAddFriend }) {
   const [newFriend, setNewFriend] = useState('');
-  const [openWindow, setOpenWindow] = useState(false);
-  if (!openWindow)
-    return (
-      <button
-        className="add-friend-btn"
-        onClick={() => setOpenWindow(cur => !cur)}
-      >
-        Add Friend
-      </button>
-    );
-
-  const newID = Date.now();
+  const newID = crypto.randomUUID();
   let imgUrl = `https://i.pravatar.cc/48?u=${newID}`;
   return (
     <form
       className="add-friend-container grid"
-      onSubmit={() => {
+      onSubmit={e => {
+        e.preventDefault();
         onAddFriend(newFriend, imgUrl, newID);
-        setOpenWindow(cur => !cur);
         setNewFriend('');
       }}
     >
@@ -229,8 +231,16 @@ function AddFriend({ onAddFriend }) {
         placeholder="img url..."
         defaultValue={imgUrl}
       />
-      <button className="close-btn">Add</button>
+      <Button>Add Friend</Button>
     </form>
+  );
+}
+
+function Button({ onClick, children, className }) {
+  return (
+    <button className={className} onClick={onClick}>
+      {children}
+    </button>
   );
 }
 
