@@ -14,7 +14,7 @@ function App() {
   const [activePlayer, setActivePlayer] = useState(1);
   const [currentScore, setCurrentScore] = useState(0);
   const [totalScore, setTotalScore] = useState(initialScore);
-  const [showInstruction, setShowInstruction] = useState(true);
+  const [showInstruction, setShowInstruction] = useState(true); //ONLY FOR DISPLAYING INSTRUCTION
   const gameOver = Object.entries(totalScore)
     .flat()
     .some(num => num >= 100);
