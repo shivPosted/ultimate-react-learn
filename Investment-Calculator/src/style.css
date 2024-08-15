@@ -1,0 +1,85 @@
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 62.5%;
+  font-family: sans-serif;
+}
+
+.app {
+  max-width: 40%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  /* align-items: center; */
+}
+
+.user-input {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  color: #fff;
+  gap: 1.2rem;
+  font-size: 3.2rem;
+  font-weight: 500;
+  padding: 2.4rem;
+  background-image: linear-gradient(
+    233deg,
+    hsl(315deg 88% 57%) 1%,
+    hsl(313deg 81% 59%) 34%,
+    hsl(310deg 74% 60%) 42%,
+    hsl(305deg 66% 61%) 47%,
+    hsl(299deg 60% 62%) 49%,
+    hsl(292deg 63% 65%) 50%,
+    hsl(284deg 66% 67%) 51%,
+    hsl(275deg 71% 70%) 51%,
+    hsl(266deg 76% 72%) 51%,
+    hsl(256deg 83% 75%) 50%,
+    hsl(251deg 69% 72%) 50%,
+    hsl(251deg 46% 63%) 49%,
+    hsl(251deg 32% 54%) 49%,
+    hsl(251deg 26% 46%) 49%,
+    hsl(252deg 25% 38%) 50%,
+    hsl(252deg 24% 30%) 51%,
+    hsl(253deg 23% 23%) 53%,
+    hsl(254deg 21% 16%) 58%,
+    hsl(257deg 17% 9%) 66%,
+    hsl(0deg 0% 0%) 99%
+  );
+  padding-left: 4.8rem;
+}
+label {
+  /* justify-self: end; */
+}
+
+input {
+  border: none;
+  background-color: transparent;
+  color: #fff;
+  padding-block: 0.6rem;
+  padding-left: 1rem;
+  outline: 1px solid #fff;
+  border-radius: 3px;
+  font-weight: 700;
+  width: 50%;
+  font-size: 1.4rem;
+  background-color: inherit;
+}
+
+thead {
+  color: #4fba93;
+  /* font-size: 2rem; */
+}
+td {
+  padding-block: 1rem;
+}
+table {
+  background-color: #222;
+  width: 100%;
+  color: #fff;
+  font-size: 1.6rem;
+  text-align: center;
+  padding: 1.2rem 2.4rem;
+}
