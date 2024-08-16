@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { formatter, buildTable } from './util';
 import './style.css';
 
 const initTable = [];
@@ -17,80 +18,66 @@ for (let i = 0; i < 12; i++) {
 }
 
 function App() {
-  const [table, setTable] = useState('');
+  const [userInput, setUserInput] = useState({
+    initialValue: 10000,
+    anual: 300,
+    interestRate: 5.5,
+    duration: 10,
+  });
 
-  function handleTable(duration, initialValue, anualValue, interestRate) {
-    const newTable = [];
-    let totalInterest = 0;
-
-    for (let i = 0; i < duration; i++) {
-      const investmentCapital = initialValue + (anualValue * i + anualValue);
-      totalInterest += (interestRate / 100) * investmentCapital;
-      newTable.push({
-        investedCapital: investmentCapital,
-        interestThisYear: (interestRate / 100) * investmentCapital,
-        totalInterest: totalInterest,
-        year: i + 1,
-        investmentValue: investmentCapital + totalInterest,
-      });
-    }
-    setTable([...newTable]);
+  function handleChange(inputIdentifier, newValue) {
+    if (+newValue < 0) return null;
+    setUserInput(preValue => {
+      return { ...preValue, [inputIdentifier]: +newValue };
+    });
   }
+
+  const table = [];
+  buildTable(userInput, table);
+
   return (
     <div className="app">
-      <Input render={handleTable} />
+      <Input userInput={userInput} handleChange={handleChange} />
       {table && <InvestmentTable table={table} />}
     </div>
   );
 }
 
-function Input({ render }) {
-  const [init, setInit] = useState('');
-  const [anual, setAnual] = useState('');
-  const [interest, setInterest] = useState('');
-  const [duration, setDuration] = useState('');
-
+function Input({ userInput, handleChange }) {
   return (
-    <form
-      className="user-input"
-      onSubmit={e => {
-        e.preventDefault();
-        render(duration, init, anual, interest);
-      }}
-    >
+    <div className="user-input">
       <label htmlFor="init-invest">Initial Investment</label>
       <input
         type="number"
         id="init-invest"
-        value={init}
-        onChange={e => setInit(+e.target.value)}
+        value={userInput.initialValue}
+        onChange={e => handleChange(`initialValue`, e.target.value)}
       />
 
       <label htmlFor="anual-invest">Anual Investment</label>
       <input
         type="number"
         id="anual-invest"
-        value={anual}
-        onChange={e => setAnual(+e.target.value)}
+        value={userInput.anual}
+        onChange={e => handleChange(`anual`, e.target.value)}
       />
 
       <label htmlFor="interest">Interest Rate</label>
       <input
         type="number"
         id="interest"
-        value={interest}
-        onChange={e => setInterest(+e.target.value)}
+        value={userInput.interestRate}
+        onChange={e => handleChange(`interestRate`, e.target.value)}
       />
 
       <label htmlFor="duration">Duration</label>
       <input
         type="number"
         id="duration"
-        value={duration}
-        onChange={e => setDuration(+e.target.value)}
+        value={userInput.duration}
+        onChange={e => handleChange(`duration`, e.target.value)}
       />
-      <button>Get it</button>
-    </form>
+    </div>
   );
 }
 
@@ -112,10 +99,6 @@ function InvestmentTable({ table }) {
 }
 
 function TableBody({ table }) {
-  const formatter = new Intl.NumberFormat('en-IN', {
-    style: 'currency',
-    currency: 'INR',
-  });
   return (
     <tbody>
       {table.map((record, i) => (
@@ -124,7 +107,7 @@ function TableBody({ table }) {
           <td>{formatter.format(record.investmentValue)}</td>
           <td>{formatter.format(record.interestThisYear)}</td>
           <td>{formatter.format(record.totalInterest)}</td>
-          <td>{formatter.format(record.investedCapital)}</td>
+          <td>{formatter.format(record.investmentCapital)}</td>
         </tr>
       ))}
     </tbody>

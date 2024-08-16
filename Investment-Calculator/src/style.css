@@ -11,7 +11,10 @@ html {
 
 .app {
   max-width: 40%;
-  margin: 0 auto;
+  margin: 1.6rem auto;
+  border-radius: 9px;
+  overflow: clip;
+  box-shadow: 0 4px 16px 8px #00000044;
   display: flex;
   flex-direction: column;
   /* align-items: center; */
@@ -26,51 +29,49 @@ html {
   font-weight: 500;
   padding: 2.4rem;
   background-image: linear-gradient(
-    233deg,
-    hsl(315deg 88% 57%) 1%,
-    hsl(313deg 81% 59%) 34%,
-    hsl(310deg 74% 60%) 42%,
-    hsl(305deg 66% 61%) 47%,
-    hsl(299deg 60% 62%) 49%,
-    hsl(292deg 63% 65%) 50%,
-    hsl(284deg 66% 67%) 51%,
-    hsl(275deg 71% 70%) 51%,
-    hsl(266deg 76% 72%) 51%,
-    hsl(256deg 83% 75%) 50%,
-    hsl(251deg 69% 72%) 50%,
-    hsl(251deg 46% 63%) 49%,
-    hsl(251deg 32% 54%) 49%,
-    hsl(251deg 26% 46%) 49%,
-    hsl(252deg 25% 38%) 50%,
-    hsl(252deg 24% 30%) 51%,
-    hsl(253deg 23% 23%) 53%,
-    hsl(254deg 21% 16%) 58%,
-    hsl(257deg 17% 9%) 66%,
-    hsl(0deg 0% 0%) 99%
+    318deg,
+    hsl(315deg 88% 57%) 0%,
+    hsl(308deg 88% 59%) 5%,
+    hsl(301deg 88% 61%) 10%,
+    hsl(295deg 87% 63%) 15%,
+    hsl(288deg 88% 65%) 20%,
+    hsl(281deg 87% 67%) 24%,
+    hsl(274deg 87% 69%) 29%,
+    hsl(267deg 88% 71%) 33%,
+    hsl(261deg 87% 73%) 37%,
+    hsl(254deg 87% 75%) 40%,
+    hsl(251deg 87% 72%) 44%,
+    hsl(251deg 87% 64%) 47%,
+    hsl(251deg 87% 56%) 50%,
+    hsl(251deg 87% 48%) 52%,
+    hsl(251deg 87% 40%) 54%,
+    hsl(251deg 87% 32%) 56%,
+    hsl(251deg 87% 24%) 57%,
+    hsl(251deg 88% 16%) 58%,
+    hsl(250deg 85% 8%) 57%,
+    hsl(0deg 0% 0%) 56%
   );
   padding-left: 4.8rem;
-}
-label {
-  /* justify-self: end; */
 }
 
 input {
   border: none;
   background-color: transparent;
   color: #fff;
-  padding-block: 0.6rem;
+  padding-block: 1.2rem;
   padding-left: 1rem;
-  outline: 1px solid #fff;
+  outline: 3px solid #fff;
   border-radius: 3px;
   font-weight: 700;
-  width: 50%;
+  /* width: 50%; */
   font-size: 1.4rem;
   background-color: inherit;
 }
 
 thead {
-  color: #4fba93;
-  /* font-size: 2rem; */
+  color: #b66df5;
+  font-size: 1.6rem;
+  font-weight: 800;
 }
 td {
   padding-block: 1rem;
