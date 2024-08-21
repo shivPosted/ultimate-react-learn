@@ -8,8 +8,6 @@ export default function Result({
   result,
   handlePlayAgain,
 }) {
-  console.log(result);
-
   return (
     <section className="play-choice-section reveal-result">
       <h4>You Picked</h4>
