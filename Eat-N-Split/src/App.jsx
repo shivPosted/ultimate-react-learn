@@ -73,6 +73,7 @@ function App() {
       </Button>
       {currentId && (
         <SplitBill
+          key={currentId}
           openAddForm={openAddForm}
           friendList={friendList}
           handlSplitBill={handlSplitBill}
@@ -145,6 +146,7 @@ function SplitBill({ friendList, handlSplitBill, currentId }) {
   function handleChange(val) {
     setTarget(val);
   }
+
   return (
     <div className="split-bill">
       <h2>Split A bill with {friendName}</h2>
