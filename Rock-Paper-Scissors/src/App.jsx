@@ -4,51 +4,26 @@ import Header from './components/Header';
 import Result from './components/Results';
 import { useState } from 'react';
 import Rules from './components/Rules';
-
-function calculateResult(yourChoice, computerChoice) {
-  if (
-    (yourChoice === 0 && computerChoice === 1) ||
-    (yourChoice === 1 && computerChoice === 2) ||
-    (yourChoice === 2 && computerChoice === 0)
-  )
-    return 0;
-  else if (yourChoice === computerChoice) return 1;
-  else return 2;
-}
+import calculateResult from './components/util';
+let score = 0;
 
 function App() {
-  const [userChoice, setUserChoice] = useState('');
-  const [computerChoice, setComputerChoice] = useState('');
+  const [userChoice, setUserChoice] = useState(0);
+  const [computerChoice, setComputerChoice] = useState(0);
   const [play, setPlay] = useState(true);
   const [showRules, setShowRules] = useState(false);
-  const [score, setScore] = useState(0);
 
   const result = calculateResult(userChoice, computerChoice);
-
-  console.log(result);
   function handleClick(newChoice) {
     const randomNo = Math.trunc(Math.random() * 3);
-    console.log(randomNo);
     setPlay(false);
     setUserChoice(+newChoice);
     setComputerChoice(randomNo);
-
-    setScore(cur => {
-      console.log(cur);
-      if (result === 2) {
-        return cur + 1;
-      } else if (result === 0) {
-        return cur === 0 ? cur : cur - 1;
-      } else {
-        return cur;
-      }
-    });
+    console.log(result);
   }
 
   function handlePlayAgain() {
     setPlay(true);
-    setComputerChoice('');
-    setUserChoice('');
   }
 
   function hideRulesOverlay() {
@@ -56,7 +31,7 @@ function App() {
   }
   return (
     <>
-      <Header score={score} />
+      <Header userChoice={userChoice} computerChoice={computerChoice} />
       {play && <Main handleClick={handleClick} />}
       {!play && (
         <Result
