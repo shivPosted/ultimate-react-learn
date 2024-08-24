@@ -7,13 +7,18 @@ export default function Main({
   modifyAccountMovements,
   allAccounts,
   modifyAccounts,
+  handleLogOut,
 }) {
   console.log(allAccounts);
   setBody('a-login');
   console.log(currAcc);
   return (
     <main className="main-landing-page">
-      <Nav curName={currAcc.owner?.split(' ')[0]} />
+      <Nav curName={currAcc.owner?.split(' ')[0]}>
+        <Button className="logout btn" handleClick={handleLogOut}>
+          Logout
+        </Button>
+      </Nav>
       <MainTransaction currAcc={currAcc}>
         <TransactionMovements currAcc={currAcc} />
         <TransferMoney
@@ -22,17 +27,23 @@ export default function Main({
           modifyAccounts={modifyAccounts}
           currAcc={currAcc}
         />
+        <RequestLoan
+          handleAccount={modifyAccountMovements}
+          modifyAccounts={modifyAccounts}
+          currAcc={currAcc}
+          allAccounts={allAccounts}
+        />
       </MainTransaction>
     </main>
   );
 }
 
-function Nav({ curName }) {
+function Nav({ curName, children }) {
   return (
     <nav className="welcome-message">
       <h2 className="main-section-welcome">Welcome back, {curName}</h2>
       <img src="./logo.png" alt="logo-bank" />
-      <Button className="logout btn">Logout</Button>
+      {children}
     </nav>
   );
 }
@@ -49,7 +60,13 @@ function MainTransaction({ children, currAcc }) {
           </span>
         </p>
       </div>
-      <div className="current-balance-display"></div>
+      <div className="current-balance-display">
+        {numFormatter(
+          +currAcc.movements.reduce((accum, val) => accum + val, 0),
+          currAcc.currency,
+          currAcc.locale
+        )}
+      </div>
       {children}
     </section>
   );
@@ -64,7 +81,7 @@ function TransactionMovements({ currAcc }) {
             key={currAcc.movementsDates[i]}
             type={movement > 0 ? 'deposit' : 'withdrawl'}
             movementNum={i + 1}
-            movement={Math.abs(movement)}
+            movement={movement}
             movementDate={currAcc.movementsDates[i]}
             currAcc={currAcc}
           />
@@ -81,6 +98,7 @@ function TransactionMovementsRow({
   movementDate,
   movement,
 }) {
+  // const money = movement >= 0 movement :
   return (
     <li className="transaction-row">
       <div className={`type_${type}`}>
@@ -99,7 +117,7 @@ function TransactionMovementsRow({
 }
 
 function TransferMoney({
-  modifyAccountMovements,
+  handleAccount,
   allAccounts,
   currAcc,
   modifyAccounts,
@@ -116,18 +134,24 @@ function TransferMoney({
     const indexTransfering = allAccounts.findIndex(
       account => currAcc.userName === account.userName
     );
-    if (indexTransfered === -1) return null;
+    if (
+      indexTransfered === -1 ||
+      Number(amount) >
+        Number(currAcc.movements.reduce((accum, val) => accum + val, 0))
+    )
+      return null;
     console.log(indexTransfered);
 
     const newAccounts = [...allAccounts];
     newAccounts[indexTransfered]?.movements.push(+amount);
-    newAccounts[indexTransfering]?.movments.push(0 - Number(amount));
+    newAccounts[indexTransfering]?.movements.push(0 - Number(amount));
     newAccounts[indexTransfered]?.movementsDates.push(new Date().toISOString());
     newAccounts[indexTransfering]?.movementsDates.push(
       new Date().toISOString()
     );
 
-    modifyAccountMovements(cur => {});
+    handleAccount(newAccounts[indexTransfering]);
+
     modifyAccounts(newAccounts);
     console.log(newAccounts);
   }
@@ -151,6 +175,62 @@ function TransferMoney({
           onChange={e => setTransferAmount(e.target.value)}
         />
         <button className="transfer-btn function-btn">&rArr;</button>
+      </TransactionForm>
+    </div>
+  );
+}
+
+function RequestLoan({ currAcc, handleAccount, modifyAccounts, allAccounts }) {
+  const [requestedLoan, setRequestedLoan] = useState(0);
+  function handleLoan(amount) {
+    const requestedAmount = Number(amount);
+    //eligible for loan only if the total balance is at least 10% of requested amount
+
+    const currBalance = Number(
+      currAcc.movements.reduce((accum, val) => accum + val, 0)
+    );
+
+    const checkingAmount = requestedAmount * 0.1;
+
+    if (!(currBalance >= checkingAmount)) return null;
+
+    const movements = [...currAcc.movements, requestedAmount];
+    const movementsDates = [
+      ...currAcc.movementsDates,
+      new Date().toISOString(),
+    ];
+    handleAccount(cur => {
+      return {
+        ...cur,
+        movements,
+        movementsDates,
+      };
+    });
+
+    const newAccounts = [...allAccounts];
+    const curAccIndex = newAccounts.findIndex(
+      account => account.owner === currAcc.owner
+    );
+
+    newAccounts[curAccIndex].movements = movements;
+    newAccounts[curAccIndex].movementsDates = movementsDates;
+
+    modifyAccounts(newAccounts);
+  }
+  return (
+    <div className="request_loan">
+      <h3>Request Loan</h3>
+      <TransactionForm
+        className="money-function-form"
+        handleForm={() => handleLoan(requestedLoan)}
+      >
+        <input
+          type="number"
+          className="loan-amount"
+          value={requestedLoan}
+          onChange={e => setRequestedLoan(e.target.value)}
+        />
+        <button className="function-btn">&rarr;</button>
       </TransactionForm>
     </div>
   );

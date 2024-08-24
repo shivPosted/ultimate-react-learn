@@ -67,6 +67,9 @@ function App() {
     if (!currAccount) return null;
     setAccount(currAccount);
   }
+  function handleLogOut() {
+    setAccount('');
+  }
   return (
     <>
       {!account && <Login handleLogin={handleLogin} />}
@@ -76,6 +79,7 @@ function App() {
           allAccounts={allAccounts}
           modifyAccountMovements={setAccount}
           modifyAccounts={setAllAccounts}
+          handleLogOut={handleLogOut}
         />
       )}
     </>
