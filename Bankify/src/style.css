@@ -1,0 +1,489 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap');
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+*:focus {
+  border: none;
+  outline: none;
+  border: 1px solid #aaa;
+}
+html {
+  font-size: 62.5%;
+  position: relative;
+}
+body {
+  font-family: 'Poppins', sans-serif;
+
+  /* position: relative; */
+}
+input::placeholder {
+  opacity: 0.7;
+}
+
+.b-login {
+  background-image: url(background-illustration.jpg);
+  background-size: contain;
+  background-position: center;
+  backdrop-filter: blur(6px);
+  background-repeat: no-repeat;
+  height: 100vh;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.logo {
+  width: 3rem;
+}
+.logo-img {
+  width: 100%;
+}
+.welcome {
+  display: flex;
+  align-items: center;
+  margin-bottom: 4.8rem;
+  gap: 3.2rem;
+}
+h1 {
+  color: #222;
+  font-size: 2.4rem;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+.landing-login {
+  max-width: 80rem;
+  height: 40rem;
+  overflow: hidden;
+  backdrop-filter: blur(6px);
+  box-shadow: 6px 6px 12px 6px rgba(0, 0, 0, 0.252);
+  border-radius: 10px;
+}
+.heading-login {
+  text-align: center;
+  font-size: 2.4rem;
+  margin-bottom: 3.6rem;
+}
+.description {
+  background-color: rgba(197, 197, 197, 0.395);
+  color: #555;
+  backdrop-filter: blur(600px);
+  padding: 6.4rem 4.4rem;
+}
+.description p {
+  font-size: 1.6rem;
+  color: #222;
+  line-height: 1.4;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+.login {
+  background-color: #fff;
+  padding: 6.4rem 4.4rem;
+}
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 2.4rem;
+  align-items: center;
+}
+.user,
+.password {
+  background-color: #fff;
+  color: #555;
+  height: 3.2rem;
+  font-size: 1.8rem;
+  border: none;
+  border: 0.1px solid #aaa;
+  outline: none;
+  border-radius: 9px;
+  padding: 1.2rem;
+  padding-left: 1rem;
+  transition: all 0.3s;
+  width: 80%;
+}
+.btn {
+  background-color: #222;
+  color: #fff;
+  border: 1px solid #222;
+  outline: none;
+  font-size: 1.6rem;
+  padding: 1.2rem 2.4rem;
+  border-radius: 9px;
+  font-weight: 700;
+  width: 80%;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.btn:hover {
+  color: #222;
+  background-color: #fff;
+  /* box-shadow: inset 0 0 0 1px #222; */
+}
+.user:focus,
+.password:focus {
+  width: 78%;
+}
+
+/*HIDDEN*/
+.hidden {
+  display: none;
+}
+
+/*Main*/
+.a-login {
+  height: 100vh;
+  /* background-image: url(main-background.jpg); */
+  backdrop-filter: blur(20px);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  /* transition: all 1s; */
+}
+.welcome-message {
+  max-width: 130rem;
+  display: flex;
+  /* max-width: 50%; */
+  margin: 0 auto;
+  align-items: center;
+  padding-top: 1.4rem;
+  justify-content: space-between;
+}
+.welcome-message img {
+  /* margin-left: auto; */
+  width: 4rem;
+  height: 100%;
+  margin-left: -18rem;
+}
+.logout {
+  width: auto;
+}
+h3 {
+  margin: 1.6rem;
+  margin-left: auto;
+  font-size: 1.8rem;
+}
+.main-section-welcome {
+  font-size: 2.6rem;
+  padding-left: 3.2rem;
+  padding-top: 1.2rem;
+  font-weight: 500;
+}
+.main-transaction {
+  max-width: 110rem;
+  margin: 3rem auto;
+  display: grid;
+  grid-template-columns: 60fr 40fr;
+  grid-template-rows: auto repeat(3, 15rem) auto;
+  column-gap: 3.2rem;
+  row-gap: 2.4rem;
+  padding: 0 1rem;
+}
+.current-balance-update {
+  align-self: center;
+}
+.current-balance-update h2 {
+  font-size: 2.2rem;
+  font-weight: normal;
+}
+.current-balance-update p {
+  font-size: 1.4rem;
+  color: #555;
+}
+.current-balance-display {
+  font-size: 4.4rem;
+  justify-self: end;
+}
+
+/*transaction-history*/
+.transaction-history {
+  background-image: url(transaction.jpg);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  backdrop-filter: blur(1000px);
+  border-radius: 10px 0 0 10px;
+  box-shadow: 2px 2px 4px rgb(0, 0, 0, 0.3);
+  scrollbar-width: 0;
+  overflow-y: auto;
+  grid-row: 2 / 5;
+  position: relative;
+}
+.transaction-history::-webkit-scrollbar {
+  width: 0.5px;
+}
+
+.transaction-history::-webkit-scrollbar-thumb {
+  border-radius: 100vw;
+  height: 10px;
+}
+.overlay-transaction {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background-color: rgb(255, 255, 255, 0.3);
+  backdrop-filter: blur(8px);
+  z-index: -1;
+  top: 0;
+  left: 0;
+}
+.transaction-row {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #eee;
+  padding: 1.6rem 2.4rem;
+}
+.type_deposit,
+.type_withdrawl {
+  font-weight: 700;
+  margin-right: 1.6rem;
+  color: #fff;
+  border-radius: 10rem;
+  padding: 2px 6px;
+  box-shadow: 2px 0 4px rgba(0, 0, 0, 0.132);
+  text-transform: uppercase;
+}
+.type_deposit {
+  background-image: linear-gradient(to bottom right, #94d82d, #51cf66);
+}
+.type_withdrawl {
+  background-image: linear-gradient(to bottom right, #ff6b6b, #f06595);
+}
+.date_transaction {
+  color: #777;
+  font-size: 1.4rem;
+}
+.transaction_amount {
+  margin-left: auto;
+  font-size: 2.2rem;
+  color: #555;
+}
+
+.transfer_money,
+.request_loan,
+.close_account {
+  border-radius: 9px;
+  padding: 1.4rem 2.8rem;
+  box-shadow: 2px 2px 4px rgb(85, 85, 85, 0.3);
+}
+
+.transfer_money {
+  background-image: linear-gradient(to bottom right, #fcc419, #ff922b);
+  grid-row: 2;
+}
+.request_loan {
+  background-image: linear-gradient(to bottom right, #94d82d, #51cf66);
+  grid-row: 3;
+  grid-column: 2;
+}
+.close_account {
+  background-image: linear-gradient(to bottom right, #ff6b6b, #f06595);
+  grid-row: 4;
+  grid-column: 2;
+}
+.money-function-form {
+  display: grid;
+  grid-template-columns: repeat(2, 3fr) 1fr;
+  column-gap: 1rem;
+  row-gap: 0.5rem;
+}
+.request_loan .money-function-form {
+  grid-template-columns: repeat(2, 1fr);
+}
+.money-function-form input {
+  height: 3.2rem;
+  width: 100%;
+  border: none;
+  outline: none;
+  border-radius: 9px;
+  opacity: 0.4;
+  font-size: 2rem;
+  padding-left: 1.2rem;
+}
+.money-function-form input:focus {
+  opacity: 0.6;
+}
+.money-function-form div {
+  text-align: center;
+  font-size: 1.2rem;
+}
+
+.function-btn {
+  justify-self: end;
+  cursor: pointer;
+  width: 4.8rem;
+  padding: 2px 4px;
+  border-radius: 7px;
+  border: none;
+  justify-self: start;
+  font-size: 1.8rem;
+}
+
+/*Summary*/
+.summary_account {
+  font-size: 1.2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sort {
+  display: flex;
+  gap: 5px;
+  font-size: 1.4rem;
+  cursor: pointer;
+  /* align-items: flex-end; */
+}
+.sort-icon {
+  color: black;
+  display: inline-block;
+  height: 2rem;
+  width: 2rem;
+}
+
+.input_amount,
+.output_amount,
+.interest_amount {
+  font-size: 2.4rem;
+  font-weight: 500;
+  margin-left: 1rem;
+}
+
+.input_amount {
+  color: #6cb400;
+}
+.output_amount {
+  color: #f06595;
+}
+.interest_amount {
+  color: #ff922b;
+}
+
+/*log-out timer*/
+.log-out-timer {
+  justify-self: end;
+  align-self: center;
+  font-size: 1.4rem;
+}
+
+.logout {
+  background-color: #fff;
+  color: #222;
+  box-shadow: inset 0 0 0 0.5px #222;
+  transition: all 0.3s;
+}
+.logout:hover {
+  border: none;
+  background-color: #222;
+  color: #fff;
+}
+.logout-confirm {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  /* height: 20%; */
+  padding: 4.4rem 5.4rem;
+  border-radius: 10px;
+  box-shadow: 2px 4px 8px rgba(85, 85, 85, 0.422);
+  z-index: 1000;
+
+  /* height: auto; */
+}
+.logout-confirm h4 {
+  font-size: 2.4rem;
+  margin-bottom: 3.2rem;
+}
+.response {
+  display: flex;
+  justify-content: space-around;
+  /* align-items: center; */
+}
+.ok,
+.cancel {
+  width: auto;
+}
+.ok:hover,
+.cancel:hover {
+  border: none;
+  box-shadow: inset 0 0 0 1px #000;
+}
+.cross-button {
+  position: absolute;
+  top: 5%;
+  right: 5%;
+  font-size: 3.2rem;
+  border: none;
+  background-color: transparent;
+  color: #777;
+  transition: all 0.3s;
+}
+
+.cross-button:hover {
+  color: #222;
+  cursor: pointer;
+}
+
+.overlay-logout {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  background-color: #ffffff2d;
+  backdrop-filter: blur(8px);
+}
+
+/*utility*/
+.wrong-info {
+  text-align: center;
+  background-color: #ffe3e3;
+  padding: 0.8rem 1.6rem;
+  font-size: 1.4rem;
+  position: absolute;
+  top: 8rem;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 9px;
+  color: #ff6b6b;
+  font-weight: 100;
+  opacity: 0;
+  /* box-shadow: 0 2px 4px rgba(255, 107, 107, 0.43); */
+  transition: all 1.5s;
+}
+
+.help {
+  position: absolute;
+  display: flex;
+  gap: 1.2rem;
+  top: 4%;
+  left: 2%;
+  padding-block: 4.8rem;
+  background-color: #fff;
+  box-shadow: 2px 2px 4px rgba(119, 119, 119, 0.468);
+  /* padding: 2rem; */
+  font-size: 1.8rem;
+  border-radius: 10px;
+  opacity: 0;
+  transition: all 1s;
+}
+.help > div {
+  padding: 2.4rem 2.8rem;
+}
+.help > div:nth-child(1) {
+  border-right: 3.5px dotted #ccc;
+}
+.help-login {
+  width: 3rem;
+  height: 3rem;
+  position: absolute;
+  top: 5%;
+  left: 12.3%;
+  transform: translateX(-60%);
+  cursor: pointer;
+  z-index: 1;
+}
