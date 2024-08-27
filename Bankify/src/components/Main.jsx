@@ -33,6 +33,12 @@ export default function Main({
           currAcc={currAcc}
           allAccounts={allAccounts}
         />
+        <CloseAccount
+          currAcc={currAcc}
+          handleAccount={modifyAccountMovements}
+          modifyAccounts={modifyAccounts}
+          allAccounts={allAccounts}
+        />
       </MainTransaction>
     </main>
   );
@@ -159,7 +165,7 @@ function TransferMoney({
     <div className="transfer_money">
       <h3>Transfer Money</h3>
       <TransactionForm
-        className="money-function-form"
+        // className="money-function-form"
         handleForm={() => handleMoneyTransfer(transferUser, transferAmount)}
       >
         <input
@@ -174,7 +180,7 @@ function TransferMoney({
           value={transferAmount}
           onChange={e => setTransferAmount(e.target.value)}
         />
-        <button className="transfer-btn function-btn">&rArr;</button>
+        <Button className="transfer-btn function-btn">&rArr;</Button>
       </TransactionForm>
     </div>
   );
@@ -221,7 +227,7 @@ function RequestLoan({ currAcc, handleAccount, modifyAccounts, allAccounts }) {
     <div className="request_loan">
       <h3>Request Loan</h3>
       <TransactionForm
-        className="money-function-form"
+        // className="money-function-form"
         handleForm={() => handleLoan(requestedLoan)}
       >
         <input
@@ -230,17 +236,52 @@ function RequestLoan({ currAcc, handleAccount, modifyAccounts, allAccounts }) {
           value={requestedLoan}
           onChange={e => setRequestedLoan(e.target.value)}
         />
-        <button className="function-btn">&rarr;</button>
+        <Button className="request-loan-btn function-btn">&rArr;</Button>
       </TransactionForm>
     </div>
   );
 }
 
-function TransactionForm({ className, children, handleForm }) {
+function CloseAccount({ currAcc, handleAccount, modifyAccounts }) {
+  const [user, setUser] = useState('');
+  const [deletePin, setDeletePin] = useState('');
+
+  function onCloseAccount() {
+    const enteredPin = Number(deletePin);
+    console.log(currAcc.userName);
+    if (currAcc.pin === enteredPin && currAcc.userName === user) {
+      handleAccount('');
+      console.log(currAcc, user, deletePin);
+      modifyAccounts(cur => cur.filter(account => account.userName !== user));
+    }
+  }
+  return (
+    <div className="close_account">
+      <h3>Delete Account</h3>
+      <TransactionForm handleForm={onCloseAccount}>
+        <input
+          type="text"
+          className="confirm-user"
+          value={user}
+          onChange={e => setUser(e.target.value)}
+        />
+        <input
+          type="number"
+          className="confirm-pin"
+          value={deletePin}
+          onChange={e => setDeletePin(e.target.value)}
+        />
+        <Button className="close-account-btn function-btn">&rArr;</Button>
+      </TransactionForm>
+    </div>
+  );
+}
+
+function TransactionForm({ children, handleForm }) {
   return (
     <form
       action="#"
-      className={className}
+      className="money-function-form"
       onSubmit={e => {
         e.preventDefault();
         handleForm();
