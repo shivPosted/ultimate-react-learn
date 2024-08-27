@@ -39,6 +39,12 @@ export default function Main({
           modifyAccounts={modifyAccounts}
           allAccounts={allAccounts}
         />
+        <AccountSummary
+          currAcc={currAcc}
+          modifyAccountMovements={modifyAccountMovements}
+          allAccounts={allAccounts}
+          modifyAccounts={modifyAccounts}
+        />
       </MainTransaction>
     </main>
   );
@@ -273,6 +279,119 @@ function CloseAccount({ currAcc, handleAccount, modifyAccounts }) {
         />
         <Button className="close-account-btn function-btn">&rArr;</Button>
       </TransactionForm>
+    </div>
+  );
+}
+
+function AccountSummary({
+  currAcc,
+  modifyAccountMovements,
+  allAccounts,
+  modifyAccounts,
+}) {
+  const inputAmount = currAcc.movements
+    .filter(mov => mov > 0)
+    .reduce((accum, val) => accum + val, 0);
+  const outAmount = currAcc.movements
+    .filter(mov => mov < 0)
+    .reduce((accum, val) => accum + val, 0);
+
+  const interestAmount =
+    ((inputAmount + outAmount) * currAcc.interestRate) / 100;
+
+  return (
+    <div className="summary_account">
+      <div>
+        IN{' '}
+        <span className="input_amount">
+          {numFormatter(Number(inputAmount), currAcc.currency, currAcc.locale)}
+        </span>
+      </div>
+      <div>
+        OUT{' '}
+        <span className="output_amount">
+          {numFormatter(
+            Number(Math.abs(outAmount)),
+            currAcc.currency,
+            currAcc.locale
+          )}
+        </span>
+      </div>
+      <div>
+        INTEREST{' '}
+        <span className="interest_amount">
+          {numFormatter(
+            Number(interestAmount),
+            currAcc.currency,
+            currAcc.locale
+          )}
+        </span>
+      </div>
+      <Sort
+        currAcc={currAcc}
+        modifyAccountMovements={modifyAccountMovements}
+        modifyAccounts={modifyAccounts}
+        allAccounts={allAccounts}
+      >
+        sort
+      </Sort>
+    </div>
+  );
+}
+
+function Sort({ children, currAcc, modifyAccountMovements, allAccounts }) {
+  const [isSorted, setIsSorted] = useState(false);
+
+  function handleSort() {
+    setIsSorted(cur => !cur);
+
+    if (isSorted) {
+      modifyAccountMovements(() =>
+        allAccounts.find(account => account.userName === currAcc.userName)
+      );
+      return;
+    }
+    const newObj = Object.assign(currAcc, {});
+    const moneyDateLink = newObj.movements.map((mov, i) => [
+      mov,
+      newObj.movementsDates[i],
+    ]);
+
+    // moneyDateLink[0].
+    console.log([[...currAcc.movements], [...currAcc.movementsDates]]);
+
+    moneyDateLink.sort((a, b) => a[0] - b[0]);
+
+    const money = moneyDateLink.map(mov => mov[0]);
+    const dates = moneyDateLink.map(mov => mov[1]);
+
+    console.log(moneyDateLink[0][1]);
+    console.log(money, dates);
+
+    modifyAccountMovements(cur => {
+      return { ...cur, movements: money, movementsDates: dates };
+    });
+    // newObj.movementsDates.forEach((date, i) => )
+    // modifyAccountMovements()
+  }
+
+  return (
+    <div className="sort" onClick={handleSort}>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        strokeWidth="1.5"
+        stroke="currentColor"
+        className="sort-icon"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75"
+        ></path>
+      </svg>
+      {children}
     </div>
   );
 }
