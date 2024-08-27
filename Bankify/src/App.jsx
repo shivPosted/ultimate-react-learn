@@ -60,7 +60,7 @@ function App() {
   function handleLogin(inputUser, inputPin) {
     console.log(inputUser, inputPin);
     // if (typeof inputPin !== 'number') return null;
-    const [currAccount] = accounts.filter(
+    const [currAccount] = allAccounts.filter(
       account => account.userName === inputUser && account.pin === +inputPin
     );
     console.log(currAccount);
