@@ -1,5 +1,6 @@
 import Button from './Button';
 import { useEffect, useState } from 'react';
+import Logo from './logo';
 
 export default function Login({ handleLogin }) {
   useEffect(() => {
@@ -8,7 +9,7 @@ export default function Login({ handleLogin }) {
     document.title = 'Bankify | Login';
     return () => {
       document.body.classList.add('a-login');
-      document.body.classList.remove('.b-login');
+      document.body.classList.remove('b-login');
       document.title = 'Bankify | Account';
     };
   }, []);
@@ -17,7 +18,7 @@ export default function Login({ handleLogin }) {
     <section className="landing-login grid">
       <div className="description">
         <div className="welcome">
-          <img src="./bank-logo.png" alt="bank-logo" className="logo" />
+          <Logo />
           <h1>Welcome to Bankify</h1>
         </div>
         <p>

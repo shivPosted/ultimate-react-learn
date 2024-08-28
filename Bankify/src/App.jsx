@@ -84,6 +84,7 @@ function App() {
       return null;
     }
     setAccount(currAccount);
+    setShowDummyAccount(false);
   }
   function handleLogOut() {
     setAccount('');
@@ -102,11 +103,15 @@ function App() {
         />
       )}
       {error ? <DisplayError message={error} /> : ''}
+      {account ? (
+        ''
+      ) : (
+        <HelpIcon
+          showDummyAccount={showDummyAccount}
+          handleClick={handleShowDummyData}
+        />
+      )}
 
-      <HelpIcon
-        showDummyAccount={showDummyAccount}
-        handleClick={handleShowDummyData}
-      />
       {showDummyAccount && <DummyData />}
     </>
   );

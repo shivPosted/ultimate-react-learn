@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import Button from './Button';
-import { dateFormatter, setBody, numFormatter, curDateTime } from './Util';
+import { dateFormatter, numFormatter, curDateTime } from './Util';
+import Logo from './logo';
 
 export default function Main({
   currAcc,
@@ -11,7 +12,7 @@ export default function Main({
   setError,
 }) {
   console.log(allAccounts);
-  setBody('a-login');
+  // setBody('a-login');
   console.log(currAcc);
   return (
     <main className="main-landing-page">
@@ -60,7 +61,7 @@ function Nav({ curName, children }) {
   return (
     <nav className="welcome-message">
       <h2 className="main-section-welcome">Welcome back, {curName}</h2>
-      <img src="./logo.png" alt="logo-bank" />
+      <Logo height="48px" width="48px" style={{ marginLeft: '-4.8rem' }} />
       {children}
     </nav>
   );
