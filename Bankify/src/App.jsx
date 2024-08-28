@@ -1,8 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './style.css';
 import { addUserName, dateFormatter, setBody } from './components/Util';
 import Login from './components/Login';
 import Main from './components/Main';
+import DisplayError from './components/ErrorDisplay';
+import HelpIcon from './components/helpIcon';
+import DummyData from './components/dummyData';
 
 const account1 = {
   owner: 'Shiv Pratap Singh',
@@ -56,6 +59,18 @@ console.log(dateFormatter(new Date(account1.movementsDates[1])));
 function App() {
   const [account, setAccount] = useState('');
   const [allAccounts, setAllAccounts] = useState(accounts);
+  const [error, setError] = useState('');
+  const [showDummyAccount, setShowDummyAccount] = useState(false);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setError('');
+    }, 5000);
+  }, [error]);
+
+  function handleShowDummyData() {
+    setShowDummyAccount(cur => !cur);
+  }
 
   function handleLogin(inputUser, inputPin) {
     console.log(inputUser, inputPin);
@@ -64,15 +79,19 @@ function App() {
       account => account.userName === inputUser && account.pin === +inputPin
     );
     console.log(currAccount);
-    if (!currAccount) return null;
+    if (!currAccount) {
+      setError('Invalid Login Details');
+      return null;
+    }
     setAccount(currAccount);
+    setShowDummyAccount(false);
   }
   function handleLogOut() {
     setAccount('');
   }
   return (
     <>
-      {!account && <Login handleLogin={handleLogin} />}
+      {!account && <Login handleLogin={handleLogin} setError={setError} />}
       {account && (
         <Main
           currAcc={account}
@@ -80,8 +99,20 @@ function App() {
           modifyAccountMovements={setAccount}
           modifyAccounts={setAllAccounts}
           handleLogOut={handleLogOut}
+          setError={setError}
         />
       )}
+      {error ? <DisplayError message={error} /> : ''}
+      {account ? (
+        ''
+      ) : (
+        <HelpIcon
+          showDummyAccount={showDummyAccount}
+          handleClick={handleShowDummyData}
+        />
+      )}
+
+      {showDummyAccount && <DummyData />}
     </>
   );
 }

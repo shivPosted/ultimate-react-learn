@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Button from './Button';
-import { dateFormatter, setBody, numFormatter, curDateTime } from './Util';
+import { dateFormatter, numFormatter, curDateTime } from './Util';
+import Logo from './logo';
 
 export default function Main({
   currAcc,
@@ -8,9 +9,10 @@ export default function Main({
   allAccounts,
   modifyAccounts,
   handleLogOut,
+  setError,
 }) {
   console.log(allAccounts);
-  setBody('a-login');
+  // setBody('a-login');
   console.log(currAcc);
   return (
     <main className="main-landing-page">
@@ -26,19 +28,30 @@ export default function Main({
           allAccounts={allAccounts}
           modifyAccounts={modifyAccounts}
           currAcc={currAcc}
+          setError={setError}
         />
         <RequestLoan
           handleAccount={modifyAccountMovements}
           modifyAccounts={modifyAccounts}
           currAcc={currAcc}
           allAccounts={allAccounts}
+          setError={setError}
         />
         <CloseAccount
           currAcc={currAcc}
           handleAccount={modifyAccountMovements}
           modifyAccounts={modifyAccounts}
           allAccounts={allAccounts}
+          setError={setError}
         />
+        <AccountSummary
+          currAcc={currAcc}
+          modifyAccountMovements={modifyAccountMovements}
+          allAccounts={allAccounts}
+          modifyAccounts={modifyAccounts}
+          handleLogOut={handleLogOut}
+        />
+        <LogoutTimer handleLogOut={handleLogOut} />
       </MainTransaction>
     </main>
   );
@@ -48,7 +61,7 @@ function Nav({ curName, children }) {
   return (
     <nav className="welcome-message">
       <h2 className="main-section-welcome">Welcome back, {curName}</h2>
-      <img src="./logo.png" alt="logo-bank" />
+      <Logo height="48px" width="48px" style={{ marginLeft: '-4.8rem' }} />
       {children}
     </nav>
   );
@@ -123,6 +136,7 @@ function TransactionMovementsRow({
 }
 
 function TransferMoney({
+  setError,
   handleAccount,
   allAccounts,
   currAcc,
@@ -140,12 +154,15 @@ function TransferMoney({
     const indexTransfering = allAccounts.findIndex(
       account => currAcc.userName === account.userName
     );
+
     if (
       indexTransfered === -1 ||
       Number(amount) >
         Number(currAcc.movements.reduce((accum, val) => accum + val, 0))
-    )
+    ) {
+      setError('Insufficient funds or wrong user entered');
       return null;
+    }
     console.log(indexTransfered);
 
     const newAccounts = [...allAccounts];
@@ -186,7 +203,13 @@ function TransferMoney({
   );
 }
 
-function RequestLoan({ currAcc, handleAccount, modifyAccounts, allAccounts }) {
+function RequestLoan({
+  currAcc,
+  setError,
+  handleAccount,
+  modifyAccounts,
+  allAccounts,
+}) {
   const [requestedLoan, setRequestedLoan] = useState(0);
   function handleLoan(amount) {
     const requestedAmount = Number(amount);
@@ -198,7 +221,10 @@ function RequestLoan({ currAcc, handleAccount, modifyAccounts, allAccounts }) {
 
     const checkingAmount = requestedAmount * 0.1;
 
-    if (!(currBalance >= checkingAmount)) return null;
+    if (!(currBalance >= checkingAmount)) {
+      setError('You are not eligible for loan');
+      return null;
+    }
 
     const movements = [...currAcc.movements, requestedAmount];
     const movementsDates = [
@@ -242,7 +268,7 @@ function RequestLoan({ currAcc, handleAccount, modifyAccounts, allAccounts }) {
   );
 }
 
-function CloseAccount({ currAcc, handleAccount, modifyAccounts }) {
+function CloseAccount({ setError, currAcc, handleAccount, modifyAccounts }) {
   const [user, setUser] = useState('');
   const [deletePin, setDeletePin] = useState('');
 
@@ -253,7 +279,7 @@ function CloseAccount({ currAcc, handleAccount, modifyAccounts }) {
       handleAccount('');
       console.log(currAcc, user, deletePin);
       modifyAccounts(cur => cur.filter(account => account.userName !== user));
-    }
+    } else setError('Wrong pin or username');
   }
   return (
     <div className="close_account">
@@ -273,6 +299,147 @@ function CloseAccount({ currAcc, handleAccount, modifyAccounts }) {
         />
         <Button className="close-account-btn function-btn">&rArr;</Button>
       </TransactionForm>
+    </div>
+  );
+}
+
+function AccountSummary({
+  currAcc,
+  modifyAccountMovements,
+  allAccounts,
+  modifyAccounts,
+}) {
+  const inputAmount = currAcc.movements
+    .filter(mov => mov > 0)
+    .reduce((accum, val) => accum + val, 0);
+  const outAmount = currAcc.movements
+    .filter(mov => mov < 0)
+    .reduce((accum, val) => accum + val, 0);
+
+  const interestAmount =
+    ((inputAmount + outAmount) * currAcc.interestRate) / 100;
+
+  return (
+    <div className="summary_account">
+      <div>
+        IN{' '}
+        <span className="input_amount">
+          {numFormatter(Number(inputAmount), currAcc.currency, currAcc.locale)}
+        </span>
+      </div>
+      <div>
+        OUT{' '}
+        <span className="output_amount">
+          {numFormatter(
+            Number(Math.abs(outAmount)),
+            currAcc.currency,
+            currAcc.locale
+          )}
+        </span>
+      </div>
+      <div>
+        INTEREST{' '}
+        <span className="interest_amount">
+          {numFormatter(
+            Number(interestAmount),
+            currAcc.currency,
+            currAcc.locale
+          )}
+        </span>
+      </div>
+      <Sort
+        currAcc={currAcc}
+        modifyAccountMovements={modifyAccountMovements}
+        modifyAccounts={modifyAccounts}
+        allAccounts={allAccounts}
+      >
+        sort
+      </Sort>
+    </div>
+  );
+}
+
+function Sort({ children, currAcc, modifyAccountMovements, allAccounts }) {
+  const [isSorted, setIsSorted] = useState(false);
+
+  function handleSort() {
+    setIsSorted(cur => !cur);
+
+    if (isSorted) {
+      modifyAccountMovements(() =>
+        allAccounts.find(account => account.userName === currAcc.userName)
+      );
+      return;
+    }
+    const newObj = Object.assign(currAcc, {});
+    const moneyDateLink = newObj.movements.map((mov, i) => [
+      mov,
+      newObj.movementsDates[i],
+    ]);
+
+    // moneyDateLink[0].
+    console.log([[...currAcc.movements], [...currAcc.movementsDates]]);
+
+    moneyDateLink.sort((a, b) => a[0] - b[0]);
+
+    const money = moneyDateLink.map(mov => mov[0]);
+    const dates = moneyDateLink.map(mov => mov[1]);
+
+    console.log(moneyDateLink[0][1]);
+    console.log(money, dates);
+
+    modifyAccountMovements(cur => {
+      return { ...cur, movements: money, movementsDates: dates };
+    });
+    // newObj.movementsDates.forEach((date, i) => )
+    // modifyAccountMovements()
+  }
+
+  return (
+    <div className="sort" onClick={handleSort}>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        strokeWidth="1.5"
+        stroke="currentColor"
+        className="sort-icon"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75"
+        ></path>
+      </svg>
+      {children}
+    </div>
+  );
+}
+
+function LogoutTimer({ handleLogOut }) {
+  const [timer, setTimer] = useState('');
+
+  useEffect(() => {
+    let time = 5 * 60;
+    const interval = setInterval(() => {
+      time--;
+      if (time === 0) handleLogOut();
+
+      const min = String(Math.trunc(time / 60)).padStart(2, '0');
+      const sec = String(time % 60).padStart(2, '0');
+
+      const string = `${min}:${sec}`;
+      setTimer(string);
+    }, 1000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [handleLogOut]);
+
+  return (
+    <div className="log-out-timer">
+      You will be logged out in <strong className="timer">{timer}</strong>
     </div>
   );
 }
