@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Button from './Button';
 import { dateFormatter, setBody, numFormatter, curDateTime } from './Util';
 
@@ -44,6 +44,7 @@ export default function Main({
           modifyAccountMovements={modifyAccountMovements}
           allAccounts={allAccounts}
           modifyAccounts={modifyAccounts}
+          handleLogOut={handleLogOut}
         />
       </MainTransaction>
     </main>
@@ -288,6 +289,7 @@ function AccountSummary({
   modifyAccountMovements,
   allAccounts,
   modifyAccounts,
+  handleLogOut,
 }) {
   const inputAmount = currAcc.movements
     .filter(mov => mov > 0)
@@ -335,6 +337,7 @@ function AccountSummary({
       >
         sort
       </Sort>
+      <LogoutTimer handleLogOut={handleLogOut} />
     </div>
   );
 }
@@ -392,6 +395,34 @@ function Sort({ children, currAcc, modifyAccountMovements, allAccounts }) {
         ></path>
       </svg>
       {children}
+    </div>
+  );
+}
+
+function LogoutTimer({ handleLogOut }) {
+  const [timer, setTimer] = useState('');
+
+  useEffect(() => {
+    let time = 1 * 60;
+    const interval = setInterval(() => {
+      time--;
+      if (time === 0) handleLogOut();
+
+      const min = String(Math.trunc(time / 60)).padStart(2, '0');
+      const sec = String(time % 60).padStart(2, '0');
+
+      const string = `${min}:${sec}`;
+      setTimer(string);
+    }, 1000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [handleLogOut]);
+
+  return (
+    <div className="log-out-timer">
+      You will be logged out in <strong className="timer">{timer}</strong>
     </div>
   );
 }

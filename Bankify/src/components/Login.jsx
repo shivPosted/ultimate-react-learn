@@ -1,7 +1,18 @@
 import Button from './Button';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function Login({ handleLogin }) {
+  useEffect(() => {
+    document.body.classList.remove('a-login');
+    document.body.classList.add('b-login');
+    document.title = 'Bankify | Login';
+    return () => {
+      document.body.classList.add('a-login');
+      document.body.classList.remove('.b-login');
+      document.title = 'Bankify | Account';
+    };
+  }, []);
+
   return (
     <section className="landing-login grid">
       <div className="description">
