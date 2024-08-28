@@ -8,6 +8,7 @@ export default function Main({
   allAccounts,
   modifyAccounts,
   handleLogOut,
+  setError,
 }) {
   console.log(allAccounts);
   setBody('a-login');
@@ -26,18 +27,21 @@ export default function Main({
           allAccounts={allAccounts}
           modifyAccounts={modifyAccounts}
           currAcc={currAcc}
+          setError={setError}
         />
         <RequestLoan
           handleAccount={modifyAccountMovements}
           modifyAccounts={modifyAccounts}
           currAcc={currAcc}
           allAccounts={allAccounts}
+          setError={setError}
         />
         <CloseAccount
           currAcc={currAcc}
           handleAccount={modifyAccountMovements}
           modifyAccounts={modifyAccounts}
           allAccounts={allAccounts}
+          setError={setError}
         />
         <AccountSummary
           currAcc={currAcc}
@@ -46,6 +50,7 @@ export default function Main({
           modifyAccounts={modifyAccounts}
           handleLogOut={handleLogOut}
         />
+        <LogoutTimer handleLogOut={handleLogOut} />
       </MainTransaction>
     </main>
   );
@@ -130,6 +135,7 @@ function TransactionMovementsRow({
 }
 
 function TransferMoney({
+  setError,
   handleAccount,
   allAccounts,
   currAcc,
@@ -147,12 +153,15 @@ function TransferMoney({
     const indexTransfering = allAccounts.findIndex(
       account => currAcc.userName === account.userName
     );
+
     if (
       indexTransfered === -1 ||
       Number(amount) >
         Number(currAcc.movements.reduce((accum, val) => accum + val, 0))
-    )
+    ) {
+      setError('Insufficient funds or wrong user entered');
       return null;
+    }
     console.log(indexTransfered);
 
     const newAccounts = [...allAccounts];
@@ -193,7 +202,13 @@ function TransferMoney({
   );
 }
 
-function RequestLoan({ currAcc, handleAccount, modifyAccounts, allAccounts }) {
+function RequestLoan({
+  currAcc,
+  setError,
+  handleAccount,
+  modifyAccounts,
+  allAccounts,
+}) {
   const [requestedLoan, setRequestedLoan] = useState(0);
   function handleLoan(amount) {
     const requestedAmount = Number(amount);
@@ -205,7 +220,10 @@ function RequestLoan({ currAcc, handleAccount, modifyAccounts, allAccounts }) {
 
     const checkingAmount = requestedAmount * 0.1;
 
-    if (!(currBalance >= checkingAmount)) return null;
+    if (!(currBalance >= checkingAmount)) {
+      setError('You are not eligible for loan');
+      return null;
+    }
 
     const movements = [...currAcc.movements, requestedAmount];
     const movementsDates = [
@@ -249,7 +267,7 @@ function RequestLoan({ currAcc, handleAccount, modifyAccounts, allAccounts }) {
   );
 }
 
-function CloseAccount({ currAcc, handleAccount, modifyAccounts }) {
+function CloseAccount({ setError, currAcc, handleAccount, modifyAccounts }) {
   const [user, setUser] = useState('');
   const [deletePin, setDeletePin] = useState('');
 
@@ -260,7 +278,7 @@ function CloseAccount({ currAcc, handleAccount, modifyAccounts }) {
       handleAccount('');
       console.log(currAcc, user, deletePin);
       modifyAccounts(cur => cur.filter(account => account.userName !== user));
-    }
+    } else setError('Wrong pin or username');
   }
   return (
     <div className="close_account">
@@ -289,7 +307,6 @@ function AccountSummary({
   modifyAccountMovements,
   allAccounts,
   modifyAccounts,
-  handleLogOut,
 }) {
   const inputAmount = currAcc.movements
     .filter(mov => mov > 0)
@@ -337,7 +354,6 @@ function AccountSummary({
       >
         sort
       </Sort>
-      <LogoutTimer handleLogOut={handleLogOut} />
     </div>
   );
 }
@@ -403,7 +419,7 @@ function LogoutTimer({ handleLogOut }) {
   const [timer, setTimer] = useState('');
 
   useEffect(() => {
-    let time = 1 * 60;
+    let time = 5 * 60;
     const interval = setInterval(() => {
       time--;
       if (time === 0) handleLogOut();
