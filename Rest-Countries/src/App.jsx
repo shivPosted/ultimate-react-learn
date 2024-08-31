@@ -52,7 +52,7 @@ function CountryDetails({ countryDetails, setSelectedCountry }) {
     population,
     region,
     capital,
-    subRegion,
+    subregion,
     flags,
     tld: domain,
   } = countryDetails;
@@ -80,7 +80,7 @@ function CountryDetails({ countryDetails, setSelectedCountry }) {
           <strong>Region:</strong> {region}
         </p>
         <p>
-          <strong>Sub Region:</strong> {subRegion}
+          <strong>Sub Region:</strong> {subregion}
         </p>
         <p>
           <strong>Captial: </strong>
