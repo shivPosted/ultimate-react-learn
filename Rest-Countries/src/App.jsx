@@ -7,7 +7,7 @@ function App() {
   const [countryData, setCountryData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState(null);
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState("");
 
   function handleOnCountrySelect(id) {
     const countryObj = countryData.find((movie) => movie.name.official === id);
@@ -23,7 +23,12 @@ function App() {
   ) : (
     <>
       <Header>
-        <SearchBar setCountryData={setCountryData} setLoading={setIsLoading} query={query} setQuery={setQuery}/>
+        <SearchBar
+          setCountryData={setCountryData}
+          setLoading={setIsLoading}
+          query={query}
+          setQuery={setQuery}
+        />
       </Header>
 
       <Select setCountryData={setCountryData} setLoading={setIsLoading} />
