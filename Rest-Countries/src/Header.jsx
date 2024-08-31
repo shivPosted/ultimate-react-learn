@@ -12,8 +12,7 @@ export function Header({ children }) {
     </header>
   );
 }
-export function SearchBar({ setCountryData, setLoading }) {
-  const [query, setQuery] = useState('');
+export function SearchBar({ setCountryData, setLoading, query, setQuery }) {
   // console.log(countryData);
   useEffect(() => {
     const controller = new AbortController();
